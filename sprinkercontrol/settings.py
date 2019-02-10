@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import os
 import sys
-sys.path.insert(0,'/home/irrigation/Properties')
+sys.path.insert(0,'/home/tjohnson/properties/')
 import sprinklerCredentials
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
