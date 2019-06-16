@@ -13,28 +13,27 @@ def openCloseValves(valve, time_):
     time.sleep(time_)
     gpio.output(valve, gpio.HIGH)
     time.sleep(0.5)
-    print('Zone Done!')
     return None
 
-def run(all=False, zone):
-    
+def run(zone, all=False):
     if all:
-        openCloseValves(zones['zone1'][0], zones['zone1'][1])
-        openCloseValves(zones['zone2'][0], zones['zone2'][1])
-        openCloseValves(zones['zone3'][0], zones['zone3'][1])
-        openCloseValves(zones['zone4'][0], zones['zone4'][1])
-
+        for z in Zone.objects.all():
+            openCloseValves(z.pin_number, z.run_duration)
+    elif zone in Zone.objects.all().values('zone_number'):
+        z = Zone.objects.get(zone_number=zone)
+        openCloseValves(z.zone_number, z.run_duration)
     gpio.cleanup()
+    return None
 
-if __name__=='__main__':
+if __name__== '__main__':
     try:
-        run()
+        run(all=True)
     except:
         # Shut all valves!
         print("DISASTER!")
-        for num in zone:
+        for num in Zone.objects.all().values_list('pin_number', flat=True):
             gpio.setup(num, gpio.OUT)
-            gpio.output(num, GPIO.HIGH)
+            gpio.output(num, gpio.HIGH)
         gpio.cleanup()
         print('Disaster Averted')
         raise
